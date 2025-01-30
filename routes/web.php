@@ -1,27 +1,34 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExamController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/home', function () {
-    return view('form3');
-});
-Route::post('/login', [UserController::class,'GetName'])->name('getname');
-Route::post('/christina', function(Request  $r)
+Route::get('/',function()
 {
+    return redirect()->route('login.index');
+});
 
+Route::get('/login',[AuthController::class,'index'])->name("login.index");
+
+Route::get('/logout',[AuthController::class,'logout'])->name("logout");
+
+Route::post('/login',[AuthController::class,'login'])->name("login");
+
+
+
+Route::middleware('auth')->group(function(){
+    
+    // home page
+    Route::get('/home',function(){
+        return view('home');
+    })->name("home");
+
+    //exams page
+    Route::resource('exam',ExamController::class);
 
 });
+
+
 

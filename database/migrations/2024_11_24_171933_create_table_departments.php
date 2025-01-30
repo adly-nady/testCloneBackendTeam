@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('departments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->text('name');
-            $table->softDeletes();
-            $table->timestamps();
-        });
+        // Schema::create('departments', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->text('name');
+        //     $table->softDeletes();
+        //     $table->timestamps();
+        // });
     }
 
     /**

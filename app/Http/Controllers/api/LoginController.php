@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\department;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -67,6 +69,32 @@ class LoginController extends Controller
                 $data[$key]['assign_user']=(string)($value->assign_user);//User::find($value->assign_user)->name;
                 $data[$key]['assign_status']=(string)($value->assign_status);//Status::find($value->assign_status)->name;
                 $data[$key]['assign_department']="".$data[$key]['assign_department']."";
+
+                $data[$key]['assign_from_name']=User::find($value->assign_from)->name;
+                $data[$key]['assign_user_name']=User::find($value->assign_user)->name;
+                $data[$key]['assign_status_name']=Status::find($value->assign_status)->name;
+                $data[$key]['assign_department_name']=department::find($data[$key]['assign_department'])->name;
+
+                $result2 = 0;
+                $date1 = Carbon::parse($value->start_time);
+                $date2 = Carbon::parse($value->end_time);
+                $diff = $date1->diff($date2);
+                
+                $data[$key]['assign_from_name'] = User::find($value->assign_from)->name;
+                
+                $result = " " . $diff->days . " days, " .
+                          $diff->h . " hours, " .
+                          $diff->i . " minutes, " .
+                          $diff->s . " seconds.";
+                
+                $result2 += $diff->days * 24 * 60; 
+                $result2 += $diff->h * 60;        
+                $result2 += $diff->i;              
+                $result2 += $diff->s / 60;       
+                
+                $data[$key]['deadline'] = $result;
+                $data[$key]['deadline_minutes'] = $result2;
+
             }
             return $data;
         } catch (\Exception $ex) {
@@ -93,7 +121,7 @@ class LoginController extends Controller
         }
         try {
             $data = $R->all();
-            $data['assign_status']=3;
+            $data['assign_status']=1;
             Task::create($data);
             return response()->json(['errors'=>null,'mes'=>'Done'],200);
         } catch (\Exception $ex) {
@@ -145,6 +173,13 @@ class LoginController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['errors'=>$ex->getMessage(),'mes'=>'incorrect'],200);
         }
+    }
+
+    public function GetDepartments()
+    {
+
+        return response()->json(['data'=>department::get(),'errors'=>null,'mes'=>'Done'],200);
+
     }
 
 }

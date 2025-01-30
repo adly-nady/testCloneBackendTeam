@@ -15,7 +15,7 @@ class User extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table="users";
-    protected $fillable=['id', 'name', 'phone', 'email', 'password', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable=['name', 'phone', 'email', 'password'];
 
     public function getJWTIdentifier()
     {
@@ -25,5 +25,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function exams()
+    {
+        return $this->hasMany(Exam::class,'user_id');
     }
 }
