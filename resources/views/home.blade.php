@@ -7,7 +7,7 @@
     <title>Home</title>
 </head>
 <body>  
-    <h1> Welcome Eng/{{ Auth::user()->name??"" }} </h1>
+    <h1> Welcome Eng/{{ auth()->user()->name }} </h1>
     <h1> you are authantication </h1>
     <a href="{{ route('exam.index') }}"> Exams Department </a>
     {{-- <form action="{{ route('exam.index') }}" method="get">

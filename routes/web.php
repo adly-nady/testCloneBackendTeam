@@ -16,8 +16,6 @@ Route::get('/logout',[AuthController::class,'logout'])->name("logout");
 
 Route::post('/login',[AuthController::class,'login'])->name("login");
 
-
-
 Route::middleware('auth')->group(function(){
     
     // home page
@@ -27,6 +25,10 @@ Route::middleware('auth')->group(function(){
 
     //exams page
     Route::resource('exam',ExamController::class);
+
+    Route::post('/search',[ExamController::class,'SearchTitle'])->name('Search.Title');
+
+    // Route::get('/name/{id?}',[ExamController::class,'testGetParam'])->name("testGetParam");
 
 });
 

@@ -16,16 +16,27 @@
         <button type="submit" class="btn btn-primary">Create Exam</button>
     </form>
     <br><br>
-    @if(session()->has('status') && session('status') == 'Done')
-        <div class="alert alert-success" role="alert">
-            Exam created successfully ✨
-        </div>
-    @endif
-    @if(isset($status) && $status == 'Done')
+    @if(session('status') == 'delete')
         <div class="alert alert-success" role="alert">
             Exam Deleted successfully ✨
         </div>
+    @elseif (session('status') == 'create')
+        <div class="alert alert-success" role="alert">
+            Exam Created successfully ✨
+        </div>
+    @else
+        <div class="alert alert-success" role="alert">
+            Exam Updated successfully ✨
+        </div>
     @endif
+
+    <div class="divForm">
+        <form action="{{ route('Search.Title') }}" method="post">
+            @csrf
+            <input type="text" name="title">
+            <button type="submit" class="btn btn-primary">search</button>
+        </form>
+    </div>
     
     <table class="table table-dark table-striped">
         <thead>
@@ -39,7 +50,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $item)
+            @foreach ( session('data') ??  $data as $item)
                 <tr>
                     <td>{{ $item->title }}</td>
                     <td>{{ $item->description }}</td>
@@ -78,7 +89,12 @@
                                 </form>
                             </div>
                             <div class="col col-4">
-                                <button type="button" class="btn btn-success">Edit</button>
+                                {{-- <form action="{{ route('testGetParam',$item->title) }}" method="get">
+                                    <button type="submit" class="btn btn-success">Edit</button>
+                                </form> --}}
+                                <form action="{{ route('exam.edit',$item->id) }}" method="get">
+                                    <button type="submit" class="btn btn-success">Edit</button>
+                                </form>
                             </div>
                         </div>
                     </td>
